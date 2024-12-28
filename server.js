@@ -8,6 +8,11 @@ const PORT = process.env.PORT || 5000;
 // Middleware
 app.use(express.json());
 
+// Root Route
+app.get('/', (req, res) => {
+    res.send('API is running...');
+});
+
 // Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -18,6 +23,11 @@ mongoose.connect(process.env.MONGO_URI, {
 // Routes
 const authRoutes = require('./routes/auth');
 app.use('/api/auth', authRoutes);
+
+// Fallback Route
+app.use((req, res) => {
+    res.status(404).json({ message: 'Route not found' });
+});
 
 // Start server
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
